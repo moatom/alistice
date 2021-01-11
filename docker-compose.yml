@@ -1,0 +1,84 @@
+# for deploying
+version: "3"
+services:
+  # able to build products in this container
+  nginx:
+    build: ./frontend
+    image: alistice_frontend
+    container_name: alistice_frontend
+    links:
+      - uwsgi
+    ports:
+      - "80:80"
+    environment:
+      TZ: "Asia/Tokyo"
+    volumes:
+      # static folder under a dist is linked
+      - static-images:/usr/share/nginx/html/static/images
+  
+  uwsgi:
+    build: ./backend
+    image: alistice_backend
+    container_name: alistice_backend
+    links:
+      - postgres
+      - mongodb
+    ports:
+      - "3031:3031"
+    environment:
+      - TZ=Asia/Tokyo
+      - FLASK_APP=run.py
+      # - FLASK_DEBUG=0
+      # - FLASK_ENV=production
+      - FLASK_DEBUG=1
+      - FLASK_ENV=staging
+      # - FLASK_ENV=development
+      - SECRET_KEY
+      - ITSDANGEROUS_KEY
+      - MAIL_USERNAME
+      - MAIL_PASSWORD
+      - PROD_DATABASE_URI=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      - PROD_MONGODB_URI=mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@mongodb:27017/${MONGODB_DATABASE}?authSource=admin
+      # - FLASK_ENV=local
+      # - DEV_DATABASE_URI=sqlite:////tmp/test.db
+      # - DEV_MONGODB_URI=mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@mongodb:27017/${MONGODB_DATABASE}?authSource=admin
+    volumes:
+      - static-images:/app/src/static/images
+          
+  postgres:
+    image: postgres:alpine
+    container_name: alistice_postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - PGPASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - ./db/postgres/:/docker-entrypoint-initdb.d
+      - postgres-data:/var/lib/postgresql/data
+      
+  mongodb:
+    image: mongo:latest
+    container_name: alistice_mongo
+    restart: unless-stopped
+    command: mongod --auth
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_DATABASE: ${MONGODB_DATABASE}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+      MONGODB_DATA_DIR: /data/db
+      MONDODB_LOG_DIR: /dev/null
+    volumes:
+        - mongodb-data:/data/db  
+              
+volumes:
+  static-images:
+    driver: local
+  postgres-data:
+    driver: local
+  mongodb-data:
+    driver: local

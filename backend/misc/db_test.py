@@ -1,0 +1,108 @@
+from sqlalchemy import Column
+from sqlalchemy import create_engine
+from sqlalchemy import ForeignKey
+from sqlalchemy import Integer
+from sqlalchemy import String
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import backref
+from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Session
+
+
+Base = declarative_base()
+
+
+class Bookmark(Base):
+    __tablename__ = 'bookmark'
+    id = Column(Integer, primary_key=True)
+    type = Column(Integer, nullable=False)# 0:folder, 1:bookmark
+    # bin dir
+    parent_id = Column(Integer, ForeignKey('bookmark.id', ondelete='CASCADE'))
+    children = relationship("Bookmark",
+                            cascade="all, delete-orphan",
+                            passive_deletes=True,
+                            backref=backref("parent", remote_side=id))
+    # many to one
+    owner_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
+    owner = relationship('User', backref=backref('bookmarks', cascade="all, delete-orphan", passive_deletes=True), foreign_keys=[owner_id])
+
+    def __init__(self, type, parent, owner):
+        self.type = 0
+        self.parent = parent
+        self.owner = owner
+
+    def __repr__(self):
+        return "Bookmark(id=%r, parent_id=%r, owner_id=%r)" % (
+            self.id,
+            self.parent_id,
+            self.owner_id)
+
+
+class User(Base):
+    __tablename__ = 'user'
+    id = Column(Integer, primary_key=True)
+    # one (many) to one
+    root_id = Column(Integer, ForeignKey('bookmark.id', ondelete='CASCADE'))
+    root = relationship('Bookmark',
+                        cascade="all, delete-orphan",
+                        single_parent=True,
+                        foreign_keys=[root_id],
+                        # passive_deletes=True,# it regulates circular dependency... why? updateのcircular
+                        backref=backref('root_s_owner',
+                                        cascade="all, delete-orphan",
+                                        passive_deletes=True,
+                                        uselist=False)
+                        )
+
+    def __init__(self, root):
+        self.root = root
+
+    def __repr__(self):
+        return "User(id=%r, root_id=%r)" % (
+            self.id,
+            self.root_id,
+        )
+
+
+from sqlalchemy.engine import Engine
+from sqlalchemy import event
+
+@event.listens_for(Engine, "connect")
+def set_sqlite_pragma(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA foreign_keys=ON")
+    cursor.close()
+
+if __name__ == "__main__":
+    import os
+    engine = create_engine("sqlite://" + os.path.dirname(__file__) + '/test.db', echo=True)
+    Base.metadata.create_all(engine)
+    session = Session(engine)
+
+    print('===================insert')
+    root = Bookmark(0, None, None)
+    owner = User(root)
+    session.add(owner)
+    session.commit()
+
+    root.owner = owner
+    session.add(root)
+    session.commit()
+
+    # node = Bookmark(0, root, owner)
+    # session.add(node)
+    # session.commit()
+    
+    # print(owner)
+    # print(session.query(User).all())
+    # print(session.query(Bookmark).all())
+
+    # session.expire_all()
+
+
+    # print('===================delete')
+    # session.query(Bookmark).filter(Bookmark.parent==None).delete() # all
+    # # session.query(Bookmark).filter(Bookmark.parent!=None).delete() # leaf
+    # print(session.query(User).all())
+    # print(session.query(Bookmark).all())
+    # session.commit()
