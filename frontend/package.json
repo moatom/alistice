@@ -1,0 +1,82 @@
+{
+  "name": "alistice",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve --mode development",
+    "build": "vue-cli-service build --mode development",
+    "sta-build": "vue-cli-service build --mode staging",
+    "prod-build": "vue-cli-service build --mode production",
+    "lint": "vue-cli-service lint",
+    "nbp": "cd node_modules/node-bookmarks-parser && rm -f package-lock.json && yarn install && yarn build"
+  },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "babel-runtime": "^6.26.0",
+    "core-js": "^3.6.4",
+    "node-bookmarks-parser": "github:moatom/node-bookmarks-parser#master",
+    "vue": "^2.6.10",
+    "vue-axios": "^2.1.5",
+    "vue-croppie": "^2.0.1",
+    "vue-infinite-loading": "^2.4.5",
+    "vue-router": "^3.0.3",
+    "vuex": "^3.1.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.3.1",
+    "@vue/cli-plugin-eslint": "~4.3.1",
+    "@vue/cli-service": "~4.3.1",
+    "@vue/eslint-config-prettier": "^6.0.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-vue": "^6.2.2",
+    "hard-source-webpack-plugin": "^0.13.1",
+    "prettier": "^1.19.1",
+    "sass": "^1.17.4",
+    "sass-loader": "^8.0.0",
+    "vue-cli-plugin-vuetify": "~2.0.5",
+    "vue-template-compiler": "^2.6.10",
+    "vuetify": "^2.0.17",
+    "vuetify-loader": "^1.2.2"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "@vue/prettier"
+    ],
+    "rules": {},
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ],
+  "//@dependencies": {
+    "vue-markdown": "^2.2.4",
+    "sass-loader": "^7.1.0"
+  },
+  "//@scripts": {
+    "npm-nbp": "npm upgrade node-bookmarks-parser && cd node_modules/node-bookmarks-parser && npm install && npm run build",
+    "nbp": "yarn upgrade node-bookmarks-parser && cd node_modules/node-bookmarks-parser && yarn install && yarn build"
+  },
+  "resolutions": {
+    "babel-runtime/core-js": "^3.0.0",
+    "hard-source-webpack-plugin/webpack": "^4.0.0",
+    "sass-loader/webpack": "^4.0.0",
+    "vuetify-loader/webpack": "^4.0.0",
+    "webpack/micromatch/snapdragon/source-map-resolve": "^0.6.0"
+  },
+  "peerDependencies": {}
+}

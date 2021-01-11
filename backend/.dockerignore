@@ -1,0 +1,11 @@
+backend/src/static/images/favicon/*
+backend/src/static/images/usericon/*
+__pycache__
+*.db
+.env*
+
+
+dist
+note[|s]
+misc
+*~
