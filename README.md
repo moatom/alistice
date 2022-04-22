@@ -1,25 +1,36 @@
 # Alistice
-Alistice is a web application which enables us to manage our bookmarks on the cloud. I was intended to make this app very useful for a person who stacks a lot of old and messy resources in a web browser, but failed to. I keep this project here as a part of my dark past...
+Alistice is a web application which enables us to manage our bookmarks on the cloud. 
 
-The core directories are following.
-- backend: a JavaScript code on Vue.js
-- frontend: a Python 3 code on Flask
+I was intended to make this app very useful for a person who stacks a lot of old and messy resources in web browsers, but failed to. 
+
+I keep this project here as a kind of my dark past...
+
+The core directories are as follows:
+- frontend: JavaScript codes on Vue.js
+- backend: Python 3 codes on Flask
 - tool: an automatic bookmarks importation tool from browsers by Python
 
-Although the frontend's code is relatively good, the backend's one is not and ugly.
+(Although the frontend's code quality is relatively good, the backend's one is not and ugly.)
 
 ## How to Use
-First of all, set MAIL_USERNAME and MAIL_PASSWORD in .env and .dev.env file by your Gmail address and its [App Passwords](https://support.google.com/accounts/answer/185833?hl=en) at least.
+First of all, set
+- MAIL_USERNAME and MAIL_PASSWORD in .env and .dev.env file based on your Gmail address
+- and its [App Passwords](https://support.google.com/accounts/answer/185833?hl=en)
+
+at least.
+
 Then, start Docker daemon and innovate
 ```
 make sta
 ```
 in the project root.
+
 Now you can see the app from the preview of Kinematic!
+
 If you want to quit it, use `docker-compose stop`.
 
 
-Even the frontend alone would be runnable by `cd frontend && yarn install && yarn nbp && yarn serve`.
+Furthermore, the frontend alone would be runnable by `cd frontend && yarn install && yarn nbp && yarn serve`.
 
 ## Historical Images
 I had worked on this project for about 2 years since I was very beginner of programming (mainly August 2018 - March 2020).
