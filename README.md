@@ -1,16 +1,13 @@
 # Alistice
 Alistice is a web application which enables us to manage our bookmarks on the cloud. 
 
-I was intended to make this app very useful for a person who stacks a lot of old and messy resources in web browsers, but failed to. 
-
-I keep this project here as a kind of my dark past...
+It was intended to help a person who stacks a lot of old and messy resources in web browsers.
 
 The core directories are as follows:
 - frontend: JavaScript codes on Vue.js
 - backend: Python 3 codes on Flask
 - tool: an automatic bookmarks importation tool from browsers by Python
 
-(Although the frontend's code quality is relatively good, the backend's one is not and ugly.)
 
 ## How to Use
 First of all, set
